@@ -184,7 +184,8 @@ const MusicPlayer: React.FC = () => {
                step="0.01"
                value={volume}
                onChange={(e) => setVolume(parseFloat(e.target.value))}
-               className="w-full h-1 bg-foreground/30 rounded-lg appearance-none cursor-pointer accent-primary"
+               className="w-full h-1 rounded-lg appearance-none cursor-pointer"
+               style={{ background: `linear-gradient(to right, var(--foreground) ${volume * 100}%, var(--background) ${volume * 100}%)` }}
                aria-label="Volume"
              />
            </div>
