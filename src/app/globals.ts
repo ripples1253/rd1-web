@@ -1,5 +1,5 @@
 const globals = {
-    root_url: "https://d.anekodot.lol",
+    root_url: (process.env.NODE_ENV === "production" ? "https://rd1.anekodot.lol" : "https://d.anekodot.lol"),
     azuracast_root: "https://radio.anekodot.lol",
     azuracast_station_id: "registered_disk_1_radio",
     metadata_fetch_interval: 1000,
