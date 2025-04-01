@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { globals } from '@/app/globals';
 
-// Define the structure of the song data from the API
 interface Song {
   id: string;
   art: string;
@@ -17,7 +16,6 @@ interface Song {
   lyrics: string;
 }
 
-// Define the structure of the Now Playing API response
 interface NowPlayingData {
   now_playing: {
     sh_id: number;
@@ -96,7 +94,6 @@ const MusicPlayer: React.FC = () => {
       audioRef.current.load(); // reset the state
       audioRef.current.play().catch(error => {
         console.error("Error playing audio:", error);
-        // If play fails, ensure the state reflects it's not playing
         setIsPlaying(false);
       });
     }
@@ -111,23 +108,20 @@ const MusicPlayer: React.FC = () => {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: song.title,
         artist: song.artist,
-        album: song.album || 'Unknown Album', // Provide a default value
+        album: song.album || 'oops, ripley didn\'t set an album!',
         artwork: [
-          { src: song.art, sizes: '512x512', type: 'image/jpeg' }, // Adjust size/type if needed
+          { src: song.art, sizes: '512x512', type: 'image/jpeg' },
         ]
       });
 
-      // Update playback state
       navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
 
-      // Optional: Add action handlers
       navigator.mediaSession.setActionHandler('play', () => {
          if (!isPlaying) togglePlayPause();
       });
       navigator.mediaSession.setActionHandler('pause', () => {
          if (isPlaying) togglePlayPause();
       });
-      // Add other handlers like 'stop', 'seekbackward', 'seekforward' if needed
     }
   }, [song, isPlaying, togglePlayPause]); // Add togglePlayPause to dependency array
 
