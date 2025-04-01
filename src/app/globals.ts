@@ -8,7 +8,7 @@ const globals = {
 }
 
 async function check_suggestions_enabled() {
-  const response = await fetch('https://radio.anekodot.lol/backend/suggestions_config');
+  const response = await fetch(`https://radio.anekodot.lol/backend/suggestions_config?n=${Date.now()}`); // cache bust, yay!
   const data = (await response.text()).split('\n');
   return data.includes(globals.azuracast_station_id);
 }
