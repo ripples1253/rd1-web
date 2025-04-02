@@ -3,7 +3,7 @@ const globals = {
     azuracast_root: "https://radio.anekodot.lol",
     azuracast_station_id: "registered_disk_1_radio",
     metadata_fetch_interval: 1000,
-    backend_url: "http://localhost:9094",
+    backend_url: (process.env.NODE_ENV === "production" ? "https://rd1.anekodot.lol/backend" : "http://localhost:9094"),
     suggestions_enabled: false,
     star_count: 400,
     star_shooting_interval: 5000,
