@@ -28,7 +28,7 @@ export default function About() {
                             <div className="flex-1 text-center">What do we play?</div>
                         </AccordionTrigger>
                         <AccordionContent className="text-center">
-                            Honestly, it's kinda random. We play a bit of everything, but we lean more towards alternative rock, indie, rap, and vibe-y music.
+                            Honestly, it's kinda random. We play a bit of everything, but we lean more towards alternative rock, indie, rap, and generally vibe-y music.
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="item-3" className="mb-4">
@@ -36,7 +36,7 @@ export default function About() {
                             <div className="flex-1 text-center">How can I suggest a song?</div>
                         </AccordionTrigger>
                         <AccordionContent className="text-center">
-                            You can suggest a song by clicking the big button in the bottom right corner of the screen called <span className="font-semibold">Suggest Song</span>. Bruh.
+                            You can suggest a song by clicking the big button in the top right corner of the screen called <span className="font-semibold">Suggest Song</span>. Bruh.
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="item-4" className="mb-4">
