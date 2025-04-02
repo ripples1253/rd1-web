@@ -52,21 +52,20 @@ const SuggestSongForm: React.FC<SuggestSongFormProps> = ({ onClose }) => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(globals.song_suggest_webhook, {
+      const response = await fetch(`${globals.backend_url}/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          content: `New Song Suggestion:
-Name: \`${name}\`
-Link: ${link}`,
+          username: name,
+          url: link,
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'Unknown error occurred.' }));
-        throw new Error(`Failed to send suggestion. Discord responded with status ${response.status}\nMessage: ${errorData.message || 'No error message was sent to us.'}`);
+        throw new Error(`Failed to send suggestion. Backend responded with status ${response.status}\nMessage: ${errorData.message || 'No error message was sent to us.'}`);
       }
 
       setSuccessMessage('tysm! i\'ll get around to it as soon as i can! - rip');

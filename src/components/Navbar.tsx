@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { globals } from '@/app/globals';
+import { globals, check_suggestions_enabled } from '@/app/globals';
 import SuggestSongForm from './SuggestSongForm';
 import { toast } from 'sonner';
 
@@ -9,8 +9,8 @@ const Navbar = () => {
   const [showSuggestForm, setShowSuggestForm] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  const handleSuggestSong = () => {
-    if (globals.suggestions_enabled) {
+  const handleSuggestSong = async () => {
+    if (await check_suggestions_enabled()) {
       setShowSuggestForm(true);
     } else {
       toast.error('Sorry, suggestions aren\'t enabled right now. Try again later!');
