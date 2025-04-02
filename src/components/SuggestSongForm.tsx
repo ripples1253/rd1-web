@@ -65,12 +65,11 @@ Link: ${link}`,
       });
 
       if (!response.ok) {
-        // Discord often returns helpful error messages in the body
         const errorData = await response.json().catch(() => ({ message: 'Unknown error occurred.' }));
         throw new Error(`Failed to send suggestion. Discord responded with status ${response.status}\nMessage: ${errorData.message || 'No error message was sent to us.'}`);
       }
 
-      setSuccessMessage('thanks so much! i\'ll get around to it as soon as i can! - rip');
+      setSuccessMessage('tysm! i\'ll get around to it as soon as i can! - rip');
       setName('');
       setLink('');
 
@@ -84,14 +83,14 @@ Link: ${link}`,
 
   if (successMessage) {
     return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-background p-6 rounded-lg shadow-xl text-center">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center z-50 p-4">
+        <div className="bg-background/40 backdrop-blur-xl p-6 rounded-lg shadow-xl max-w-md w-full relative text-center">
           <p className="text-lg font-semibold text-accent text-foreground mb-4">{successMessage}</p>
 
           <img src="/images/miku_thumbsup.png" alt="Miku approves of this suggestion!" className="w-1/2 mx-auto"></img>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-primary text-black rounded hover:bg-primary/90 transition-colors"
+            className="px-4 py-2 bg-primary text-black rounded hover:bg-primary/90 transition-colors center"
           >
             Close
           </button>
@@ -101,8 +100,8 @@ Link: ${link}`,
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-background p-6 rounded-lg shadow-xl max-w-md w-full relative">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center z-50 p-4">
+      <div className="bg-background/40 backdrop-blur-xl p-6 rounded-lg shadow-xl max-w-md w-full relative">
          <button
             onClick={onClose}
             className="absolute top-2 right-2 text-foreground/50 hover:text-foreground p-1 rounded-full focus:outline-none"
@@ -122,7 +121,7 @@ Link: ${link}`,
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-3 py-2 bg-input border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder-foreground/50"
+              className="w-full px-3 py-2 bg-foreground/10 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder-foreground/50"
               placeholder="Your Discord Username"
             />
           </div>
@@ -134,7 +133,7 @@ Link: ${link}`,
               value={link}
               onChange={(e) => setLink(e.target.value)}
               required
-              className="w-full px-3 py-2 bg-input border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder-foreground/50"
+              className="w-full px-3 py-2 bg-foreground/10 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder-foreground/50"
               placeholder="Song URL"
             />
              <p className="text-xs text-foreground/60 mt-1">Must be a valid osu!, SoundCloud, or Spotify link.</p>
@@ -147,7 +146,7 @@ Link: ${link}`,
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2 bg-secondary text-secondary-foreground rounded hover:bg-secondary/80 hover:ring-2 hover:ring-secondary/50 transition-all disabled:opacity-50"
+              className="px-4 py-2 text-white rounded hover:ring-2 hover:ring-primary/50 transition-all disabled:opacity-50"
             >
               Cancel
             </button>

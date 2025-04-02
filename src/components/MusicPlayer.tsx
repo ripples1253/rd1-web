@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { globals } from '@/app/globals';
+import { log } from '@/app/utils';
 
 interface Song {
   id: string;
@@ -30,15 +31,13 @@ const MusicPlayer: React.FC = () => {
   const [nowPlaying, setNowPlaying] = useState<NowPlayingData | null>(null);
   const [listeners, setListeners] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.75); // Default volume 75%
+  const [volume, setVolume] = useState(0.75);
   const [lastSongId, setLastSongId] = useState<number | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Base URL for the stream
   const baseStreamUrl = `${globals.azuracast_root}/listen/${globals.azuracast_station_id}/radio.mp3`;
   const apiUrl = `${globals.azuracast_root}/api/nowplaying/${globals.azuracast_station_id}`;
 
-  // State for the audio source URL, initialized to the base URL
   const [audioSourceUrl, setAudioSourceUrl] = useState(baseStreamUrl);
 
   const fetchNowPlaying = async () => {
@@ -48,13 +47,11 @@ const MusicPlayer: React.FC = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      // Explicitly decode the response as UTF-8 before parsing JSON
       const buffer = await response.arrayBuffer();
       const decoder = new TextDecoder('utf-8');
       const text = decoder.decode(buffer);
       const data: NowPlayingData = JSON.parse(text);
 
-      // Only update state if the song ID has changed to prevent needless re-renders
       if (data.now_playing?.sh_id !== lastSongId) {
         setNowPlaying(data);
         setLastSongId(data.now_playing?.sh_id);
@@ -91,7 +88,7 @@ const MusicPlayer: React.FC = () => {
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.load(); // reset the state
+      audioRef.current.load(); // reset the state, otherwise players lag behind on the live stream
       audioRef.current.play().catch(error => {
         console.error("Error playing audio:", error);
         setIsPlaying(false);
@@ -102,7 +99,6 @@ const MusicPlayer: React.FC = () => {
 
   const song = nowPlaying?.now_playing?.song;
 
-  // Effect to update Media Session API
   useEffect(() => {
     if ('mediaSession' in navigator && song) {
       navigator.mediaSession.metadata = new MediaMetadata({
@@ -123,10 +119,53 @@ const MusicPlayer: React.FC = () => {
          if (isPlaying) togglePlayPause();
       });
     }
-  }, [song, isPlaying, togglePlayPause]); // Add togglePlayPause to dependency array
+  }, [song, isPlaying, togglePlayPause]);
+
+  // add keyboard controls for player
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      log('MusicPlayer', `KeyboardEvent call!! code: ${event.code}`);
+
+      switch (event.code) {
+        case "Space":
+          togglePlayPause();
+          break;
+        case "ArrowLeft":
+        case "ArrowDown":
+          if (volume !== 0) {
+            setVolume((volume <= 0.05) ? 0 : volume - 0.05);
+          }
+          break;
+        case "ArrowRight":
+        case "ArrowUp":
+          // change volume
+          if (volume !== 1) {
+            setVolume((volume >= 0.95) ? 1 : volume + 0.05);
+          }
+          break;
+        case "KeyD":
+          // print debug info
+          log('MusicPlayer', `nowPlaying: ${nowPlaying}`);
+          log('MusicPlayer', `audioSourceUrl: ${audioSourceUrl}`);
+          log('MusicPlayer', `volume: ${volume}`);
+          log('MusicPlayer', `isPlaying: ${isPlaying}`);
+          log('MusicPlayer', `listeners: ${listeners}`);
+          log('MusicPlayer', `lastSongId: ${lastSongId}`);
+          break;
+        default:
+          break;
+      }
+    }
+    
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    }
+  }, [togglePlayPause]);
 
   return (
-    <div className="bg-primary/20 backdrop-blur-lg p-4 rounded-lg shadow-md max-w-sm mx-auto mt-8">
+    <div className="bg-primary/20 backdrop-blur-[2px] p-4 rounded-lg shadow-md max-w-sm mx-auto mt-8">
       <div className="flex items-center space-x-4">
         {/* Album Art */}
         <div className="w-20 h-20 relative flex-shrink-0">
@@ -162,7 +201,7 @@ const MusicPlayer: React.FC = () => {
            <div className="flex items-center space-x-3 mt-2">
              <button
                 onClick={togglePlayPause}
-                className="text-foreground hover:text-accent p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-accent transition-colors"
+                className="text-foreground hover:text-accent p-1 rounded-full focus:outline-none transition-colors"
                 aria-label={isPlaying ? 'Stop' : 'Play'}
              >
                 {/* Simple Play/Stop Icon */}

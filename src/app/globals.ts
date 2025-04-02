@@ -5,6 +5,18 @@ const globals = {
     metadata_fetch_interval: 1000,
     song_suggest_webhook: "https://discord.com/api/webhooks/1356686567804239913/Ni-MM-udMSz3B8CUsM9L4cR8Mo1lv5k73McPzlaZQx-7V2kU-DyMmaexKdtRU23BlRjH",
     suggestions_enabled: false,
+    star_count: 400,
+    star_shooting_interval: 5000,
+    navbar_links: [
+      {
+        name: "Home",
+        href: "/",
+      },
+      {
+        name: "About",
+        href: "/about",
+      },
+    ],
 }
 
 async function check_suggestions_enabled() {

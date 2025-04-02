@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Toaster } from 'sonner';
 import "./globals.css";
+import StarryBackground from "@/components/StarryBackground";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -22,9 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} antialiased`}
+        className={`${poppins.variable} antialiased min-h-screen relative`}
       >
-        {children}
+        <StarryBackground />
+        <main className="relative z-10">
+          {children}
+        </main>
         <Toaster 
           toastOptions={{
             style: {
